@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import {
   Sheet,
@@ -8,59 +9,48 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function NavbarSection() {
+  const pathname = usePathname();
+
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Contact", href: "/contact" },
+    { name: "Login", href: "/login" }
+  ];
+
   return (
-    <div className="contiainer flex items-center justify-between px-10 py-4 bg-white dark:bg-gray-800 shadow">
+    <div className="contiainer max-w-screen-2xl flex items-center justify-between px-10 lg:px-20 py-4 shadow mx-auto">
       <Link href="#" className="flex items-center gap-2" prefetch={false}>
-        <MountainIcon className="h-6 w-6" />
-        <span className="text-lg font-semibold">HerbPlants</span>
+        <Image
+          src="/images/logo/logo_navbar.png"
+          alt="logo"
+          width={144}
+          height={144}
+          className="max-w-24"
+        />
       </Link>
-      <nav className="ml-auto hidden lg:flex gap-4">
-        <Link
-          href="/"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Home
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          About
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Services
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Contact
-        </Link>
-        <Link
-          href="/login"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md text-white bg-black px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-700 hover:text-white focus:bg-black focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Login
-        </Link>
-        <Link
-          href="/register"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Register
-        </Link>
+      <nav className="ml-auto hidden lg:flex lg:items-center gap-4">
+        {navItems.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            className={`px-4 py-2 rounded  ${
+              pathname === item.href
+                ? "text-green-600 font-semibold"
+                : "text-white dark:text-white"
+            } ${item.name === "Login" ? "bg-green-600" : ""}`}
+            prefetch={false}
+          >
+            {item.name}
+          </Link>
+        ))}
       </nav>
-      <Sheet>
+      {/* <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden">
             <MenuIcon className="h-6 w-6" />
@@ -70,15 +60,12 @@ export default function NavbarSection() {
 
         <SheetContent side="left">
           <SheetHeader className={``}>
-            <SheetTitle
-              className={"text-lg font-semibold items-center"}
-            >
+            <SheetTitle className={"text-lg font-semibold items-center"}>
               Logo
             </SheetTitle>
             <SheetDescription></SheetDescription>
           </SheetHeader>
 
-          
           <nav className="grid gap-4 w-[200px] px-4">
             <Link
               href="#"
@@ -117,7 +104,7 @@ export default function NavbarSection() {
             </Link>
           </nav>
         </SheetContent>
-      </Sheet>
+      </Sheet> */}
     </div>
   );
 }

@@ -11,11 +11,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="antialiased flex flex-col min-h-screen">
-        <NavbarSection/>
+        <div className="bg-green-deep dark:bg-green-deep ">
+          <NavbarSection />
+        </div>
+
         <section className="container max-w-9/10 mx-auto p-6 grow">
           {children}
         </section>
-        <FooterSection/>
+        <FooterSection />
       </body>
     </html>
   );
