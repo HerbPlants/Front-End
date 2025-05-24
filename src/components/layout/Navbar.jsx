@@ -24,7 +24,7 @@ export default function NavbarSection() {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
+    { name: "Snap", href: "/snap" },
     { name: "Services", href: "/services" },
     { name: "Contact", href: "/contact" },
     { name: "Login", href: "/login" },
