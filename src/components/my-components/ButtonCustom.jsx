@@ -9,7 +9,7 @@ export function LoadingButton({ icon = <LoaderCircle/>,isLoading, children, ...p
       {isLoading ? (
         <div className="flex items-center justify-center gap-2">
           <svg
-            className="w-4 h-4 animate-spin text-white"
+            className="w-4 h-4 animate-spin text-dark-gray-shades-15"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { LoadingButton } from "@/components/my-components/ButtonCustom";
 import { loginUser } from "@/services/authServices";
+import Image from "next/image";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username harus minimal 3 karakter"),
@@ -33,7 +34,6 @@ export default function FormLogin() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [countdown, setCountdown] = useState(null);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -47,7 +47,6 @@ export default function FormLogin() {
     setErrorMessage("");
     setSuccessMessage("");
     setIsLoading(true);
-    setCountdown(null);
 
     try {
       const result = await loginUser(data);
@@ -56,14 +55,12 @@ export default function FormLogin() {
       localStorage.setItem("refreshToken", result.refreshToken);
 
       let counter = 3;
-      setCountdown(counter);
       setSuccessMessage(
         `Login berhasil! Mengalihkan dalam ${counter} detik...`
       );
 
       const interval = setInterval(() => {
         counter -= 1;
-        setCountdown(counter);
         setSuccessMessage(
           `Login berhasil! Mengalihkan dalam ${counter} detik...`
         );
@@ -81,10 +78,20 @@ export default function FormLogin() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-screen-sm bg-green-shades-95 border-green-shades-85 py-2 lg:py-4 lg:px-10">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
-        <CardDescription>Masukkan username dan password Anda</CardDescription>
+        <CardTitle className="mx-auto">
+          <Image
+            src="/images/logo/logo_simple.png"
+            alt="logo"
+            width={144}
+            height={144}
+            className="max-w-14  md:max-w-24"
+          />
+        </CardTitle>
+        <CardDescription className="text-3xl font-semibold text-center text-dark-green-shades-15">
+          Login
+        </CardDescription>
 
         {errorMessage && (
           <div className="mt-2 rounded-md bg-red-100 border border-red-300 px-4 py-2 text-sm text-red-700">
@@ -132,13 +139,24 @@ export default function FormLogin() {
 
             <LoadingButton
               type="submit"
-              className="w-full"
+              className="w-full font-semibold"
               isLoading={isLoading}
             >
               Login
             </LoadingButton>
+            <div className="mt-2 text-center text-sm text-muted-foreground">
+          Belum punya akun?{" "}
+          <a
+            href="/register"
+            className="underline underline-offset-4 hover:text-primary"
+          >
+            Daftar
+          </a>
+        </div>
           </form>
         </Form>
+
+        
       </CardContent>
     </Card>
   );
