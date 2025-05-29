@@ -71,7 +71,6 @@ export default function NavbarSection() {
         <SheetTrigger asChild>
           <Button
             className="h-8 w-8 px-2 py-2 lg:hidden"
-            variant="outline"
             size="icon"
           >
             <Menu className="text-black" size={48} />

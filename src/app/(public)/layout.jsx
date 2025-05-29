@@ -11,7 +11,7 @@ export const metadata = {
 export default function PublicLayout({ children }) {
   return (
     <div className="antialiased flex flex-col min-h-screen bg-green-shades-97">
-      <div className="bg-green-deep dark:bg-green-deep ">
+      <div className="bg-green-deep dark:bg-green-deep sticky top-0 z-50">
         <NavbarSection />
       </div>
 
