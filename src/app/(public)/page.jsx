@@ -144,7 +144,7 @@ export default function Home() {
           <p className="text-5x1 md:text-6x1 font-semibold text-gray-700 mb-6 leading-tight">
             Ambil foto tanaman, baca info menariknya, dan kumpulkan sebagai koleksi tanaman herbalmu!
           </p>
-          <Button className="bg-[#fbfdef] border border-[#cfe69f] hover:bg-[#dcefa3] px-6 py-2 text-[#273c2c] text-lg font-medium px-8 py-3 rounded-md">
+          <Button className="bg-[#fbfdef] border border-[#cfe69f] hover:bg-[#dcefa3] text-[#273c2c] text-lg font-medium px-8 py-3 rounded-md">
             Mulai Jelajah
           </Button>
         </div>
