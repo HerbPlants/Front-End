@@ -51,13 +51,13 @@ export default function NavbarSection() {
               href={item.href}
               className={`${
                 pathname === item.href
-                  ? "text-green-600 font-semibold"
+                  ? "text-green-shades-70 font-semibold"
                   : "text-white dark:text-white font-medium"
               } ${
                 item.name === "Login"
-                  ? "bg-green-shades-70 text-dark-green-shades-15 px-4 py-2 rounded !font-bold"
+                  ? "bg-green-shades-70 !text-dark-green-shades-15 px-4 py-2 rounded !font-bold"
                   : ""
-              } tracking-wider`}
+              } hover:text-green-shades-70 tracking-wider`}
               prefetch={false}
             >
               {item.name}
@@ -79,7 +79,7 @@ export default function NavbarSection() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="left"className="text-black">
+        <SheetContent side="left"className="text-dark-grey-shades-15 bg-green-shades-95">
           <SheetHeader>
             <SheetTitle className="text-lg text-start font-semibold">HerbPlants</SheetTitle>
             <SheetDescription />

@@ -8,14 +8,14 @@ export const metadata = {
 };
 
 
-export default function AuthLayout({ children }) {
+export default function PublicLayout({ children }) {
   return (
-    <div className="antialiased flex flex-col min-h-screen">
+    <div className="antialiased flex flex-col min-h-screen bg-green-shades-97">
       <div className="bg-green-deep dark:bg-green-deep ">
         <NavbarSection />
       </div>
 
-      <section className="container max-w-9/10 mx-auto p-6 grow">
+      <section className="container max-w-9/10 mx-auto p-6 grow ">
         {children}
       </section>
       <FooterSection />

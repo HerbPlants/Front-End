@@ -1,7 +1,6 @@
 import "./globals.css";
-import FooterSection from "@/components/layout/Footer";
-import NavbarSection from "@/components/layout/Navbar";
 import { Urbanist } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
   title: "Create Next App",
@@ -16,7 +15,10 @@ const urbanist = Urbanist({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={urbanist.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
