@@ -13,6 +13,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import NAVIGATION_ITEMS from "@/data/menu-config";
+
+const navItems = NAVIGATION_ITEMS;
 
 export default function NavbarSection() {
   const pathname = usePathname();
@@ -21,13 +24,6 @@ export default function NavbarSection() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Snap", href: "/snap" },
-    { name: "Colections", href: "/collections" },
-    { name: "Login", href: "/login" },
-  ];
 
   return (
     <div className="bg-green-deep dark:bg-green-deep sticky top-0 z-50">

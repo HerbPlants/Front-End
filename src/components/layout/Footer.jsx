@@ -4,15 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowUp, MapPinIcon, Phone } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import NAVIGATION_ITEMS from "@/data/menu-config";
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Snap", href: "/snap" },
-    { name: "Colections", href: "/collections" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
-    { name: "Login", href: "/login" },
-  ];
+const navItems = NAVIGATION_ITEMS;
 
 export default function FooterSection() {
 
@@ -73,7 +67,7 @@ export default function FooterSection() {
                 <span>Indonesia</span>
               </Button>
             </div>
-            <p className="text-white text-center text-base md:text-xs lg:text-sm">&copy; 2024 HerbPlants. All rights reserved.</p>
+            <p className="text-white text-center text-base md:text-xs lg:text-sm">&copy; 2025 HerbPlants. All rights reserved.</p>
           </Card>
         </div>
       </div>

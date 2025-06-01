@@ -103,7 +103,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center  lg:items-start  gap-6">
             <h1 className="text-dark-green-shades-15 text-3xl md:text-4xl lg:text-5xl font-bold text-center lg:text-start">
-              Kenali Tanaman Herbal di Sekitarmu dengan Cara Seru!
+              <span className="leading-tight">Kenali Tanaman Herbal di Sekitarmu dengan Cara Seru!</span>
             </h1>
             <p className="text-base md:text-lg text-dark-grey-shades-20 w-11/12 md:w-full text-center lg:text-start">
               Selamat datang di Herbplants, Belajar tanaman herbal jadi lebih
@@ -161,8 +161,9 @@ export default function Home() {
                     <div className="text-sm text-dark-grey-shades-20">
                       {herb.type}
                     </div>
-                    <div className="font-semibold text-lg leading-snug text-dark-grey-shades-15">
-                      {herb.name}
+                    <div className="font-semibold text-lg text-dark-grey-shades-15">
+                      <span className="leading-tight">
+                      {herb.name}</span>
                     </div>
                   </div>
 
@@ -227,8 +228,9 @@ export default function Home() {
                 Mulai dari Langkah kecil
               </h4>
               <div className="w-full flex flex-col gap-2 md:gap-4 lg:gap-6">
-                <h1 className="text-5xl font-bold text-dark-green-shades-15 leading-tight md:text-4xl lg:text-6xl">
-                  Snap. Read. Collect.
+                <h1 className="text-5xl font-bold text-dark-green-shades-15 md:text-4xl lg:text-6xl">
+                  <span className="leading-tight">Snap. Read. Collect.</span>
+                  
                 </h1>
                 <p className="text-dark-grey-shades-20 text-5x1 md:text-6x1 font-medium  mb-6">
                   Ambil foto tanaman, baca info menariknya, dan kumpulkan
@@ -305,11 +307,11 @@ export default function Home() {
         <section className="mx-auto flex flex-col items-center md:flex-row-reverse lg:justify-center gap-5 md:px-6">
           <div className="flex justify-center lg:justify-end">
             <Image
-              src="/asset/mascot-mulai.png"
+              src="/asset/maskot-challenge.png"
               alt="Maskot Herbplants"
               width={640}
               height={640}
-              className="max-w-xs sm:max-w-sm md:max-w-xs lg:max-w-md"
+              className="max-w-xs sm:max-w-sm md:max-w-xs lg:max-w-lg"
             />
           </div>
 
@@ -319,9 +321,9 @@ export default function Home() {
                 Challenges for Fun
               </h4>
               <div className="w-full flex flex-col gap-2 md:gap-4 lg:gap-6">
-                <h1 className="font-bold text-dark-green-shades-15 leading-tight text-3xl md:text-4xl lg:text-5xl">
-                  Siap Terima Tantangan? Cari, Temukan, dan Kalahkan Misi Harian!
-                </h1>
+                <h4 className="font-bold text-dark-green-shades-15 text-3xl md:text-4xl lg:text-5xl ">
+                  <span className="leading-tight">Siap Terima Tantangan? Cari, Temukan, dan Kalahkan Misi Harian!</span>
+                </h4>
                 <p className="text-dark-grey-shades-20 text-5x1 md:text-6x1 font-medium  mb-6">
                   Uji pengetahuanmu soal tanaman herbal lewat misi seru dan kumpulkan badge eksklusif. Belajar jadi lebih menyenangkan!
                 </p>
@@ -335,8 +337,8 @@ export default function Home() {
       <section className="bg-[url(/asset/pattern.png)] bg-contain bg-top min-h-48 flex flex-col items-center justify-center gap-4 -mt-10 pt-20 md:pt-32 lg:pt-44 pb-20">
 
         {/* Teks di atas */}
-        <h2 className="font-bold text-dark-green-shades-15 leading-tight text-center text-3xl md:text-4xl lg:text-5xl">
-          Mulai petualangan herbalmu <br /> bersama Herbplants
+        <h2 className="font-bold text-dark-green-shades-15 text-center text-3xl md:text-4xl lg:text-5xl">
+          <span className="leading-tight">Mulai petualangan herbalmu <br /> bersama Herbplants</span>
         </h2>
 
         <Image
