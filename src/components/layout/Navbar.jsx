@@ -26,13 +26,12 @@ export default function NavbarSection() {
     { name: "Home", href: "/" },
     { name: "Snap", href: "/snap" },
     { name: "Colections", href: "/collections" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
     { name: "Login", href: "/login" },
   ];
 
   return (
-    <div className="container max-w-screen-2xl flex items-center justify-between px-4 md:px-10 lg:px-20 py-4 shadow mx-auto">
+    <div className="bg-green-deep dark:bg-green-deep sticky top-0 z-50">
+      <div className="container max-w-screen-2xl flex items-center justify-between px-4 md:px-10 lg:px-20 py-4 shadow mx-auto">
       <Link href="/" className="flex items-center gap-2" prefetch={false}>
         <Image
           src="/images/logo/logo_navbar.png"
@@ -104,5 +103,7 @@ export default function NavbarSection() {
         </SheetContent>
       </Sheet>
     </div>
+    </div>
+    
   );
 }
