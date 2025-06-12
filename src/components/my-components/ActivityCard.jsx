@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-const ActivityCard = ({ title, image, alt, points, actionText, heading, description }) => {
+const ActivityCard = ({ title, image, alt, points, actionText, heading, description, onActionClick }) => {
   return (
     <div className="bg-[#F6FBE9] p-4 sm:p-6 rounded-xl">
       <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b-4 border-[#CBEA7B] px-2 py-1 w-fit">
@@ -32,10 +32,13 @@ const ActivityCard = ({ title, image, alt, points, actionText, heading, descript
 
         {/* Tombol */}
         <div className="md:mt-9">
-          <button 
-          className="bg-[#CBEA7B] text-sm sm:text-base font-medium text-black px-4 py-1.5 rounded">
+          <button
+            onClick={onActionClick}
+            className="px-4 py-2 text-sm sm:text-base bg-dark-green-shades-30 hover:bg-dark-green-shades-40 text-white font-semibold rounded-md transition"
+          >
             {actionText}
           </button>
+
         </div>
       </div>
     </div>

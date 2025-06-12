@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -11,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TabsFavorite from "@/components/layout/collections/TabsFavorite";
-import { getHistoryPredictHerbs, getLikedHerbs} from "@/services/herbService";
+import { getHistoryPredictHerbs, getLikedHerbs } from "@/services/herbService";
 import LoadingOverlay from "@/components/my-components/LaodingOverlay";
 import TabsHistory from "@/components/layout/collections/TabsHistory";
 
@@ -52,7 +53,12 @@ const CollectionsPage = () => {
       {isLoading && <LoadingOverlay message="Mengambil Data Tanaman" />}
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center lg:flex-row-reverse lg:justify-center gap-4 md:gap-8 lg:gap-14 py-10">
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col items-center lg:flex-row-reverse lg:justify-center gap-4 md:gap-8 lg:gap-14 py-10"
+      >
         <div className="flex justify-center">
           <Image
             src="/images/logo/mascot-kiss.png"
@@ -70,7 +76,7 @@ const CollectionsPage = () => {
             Semua tanaman yang telah kamu kumpulkan tersimpan disini
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Tabs Section */}
       <div className="flex justify-center">
@@ -97,22 +103,13 @@ const CollectionsPage = () => {
 
             {/* Desktop Tabs */}
             <div className="hidden lg:px-20 xl:px-32 lg:w-full lg:flex lg:justify-between">
-              <TabsTrigger
-                value="all"
-                className="text-dark-grey-shades-90 data-[state=active]:border-dark-green-shades-30 data-[state=active]:border data-[state=active]:bg-dark-green-shades-25 data-[state=active]:text-white px-14"
-              >
+              <TabsTrigger value="all" className="tab-trigger">
                 All
               </TabsTrigger>
-              <TabsTrigger
-                value="favorit"
-                className="text-dark-grey-shades-90 data-[state=active]:border-dark-green-shades-30 data-[state=active]:border data-[state=active]:bg-dark-green-shades-25 data-[state=active]:text-white"
-              >
+              <TabsTrigger value="favorit" className="tab-trigger">
                 Tanaman Favorit
               </TabsTrigger>
-              <TabsTrigger
-                value="tersimpan"
-                className="text-dark-grey-shades-90 data-[state=active]:border-dark-green-shades-30 data-[state=active]:border data-[state=active]:bg-dark-green-shades-25 data-[state=active]:text-white"
-              >
+              <TabsTrigger value="tersimpan" className="tab-trigger">
                 Tanaman Tersimpan
               </TabsTrigger>
             </div>
@@ -128,42 +125,74 @@ const CollectionsPage = () => {
             </div>
           ) : (
             <div className="text-black px-4 py-10">
-              <TabsContent value="all">
-                {dataFavorite.length === 0 && dataHistory.length === 0 ? (
-                  <p className="text-center w-full col-span-full">
-                    Tidak ada yang ditampilkan
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-                    <TabsFavorite data={dataFavorite} />
-                    <TabsHistory data={dataHistory} />
-                  </div>
+              <AnimatePresence mode="wait">
+                {selectedTab === "all" && (
+                  <TabsContent value="all" forceMount>
+                    <motion.div
+                      key="all"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {dataFavorite.length === 0 && dataHistory.length === 0 ? (
+                        <p className="text-center w-full col-span-full">
+                          Tidak ada yang ditampilkan
+                        </p>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                          <TabsFavorite data={dataFavorite} />
+                          <TabsHistory data={dataHistory} />
+                        </div>
+                      )}
+                    </motion.div>
+                  </TabsContent>
                 )}
-              </TabsContent>
 
-              <TabsContent value="favorit">
-                {dataFavorite.length === 0 ? (
-                  <p className="text-center w-full">
-                    Tidak ada yang ditampilkan
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-                    <TabsFavorite data={dataFavorite} />
-                  </div>
+                {selectedTab === "favorit" && (
+                  <TabsContent value="favorit" forceMount>
+                    <motion.div
+                      key="favorit"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {dataFavorite.length === 0 ? (
+                        <p className="text-center w-full">
+                          Tidak ada yang ditampilkan
+                        </p>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                          <TabsFavorite data={dataFavorite} />
+                        </div>
+                      )}
+                    </motion.div>
+                  </TabsContent>
                 )}
-              </TabsContent>
 
-              <TabsContent value="tersimpan">
-                {dataHistory.length === 0 ? (
-                  <p className="text-center w-full">
-                    Tidak ada yang ditampilkan
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-                    <TabsHistory data={dataHistory} />
-                  </div>
+                {selectedTab === "tersimpan" && (
+                  <TabsContent value="tersimpan" forceMount>
+                    <motion.div
+                      key="tersimpan"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {dataHistory.length === 0 ? (
+                        <p className="text-center w-full">
+                          Tidak ada yang ditampilkan
+                        </p>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                          <TabsHistory data={dataHistory} />
+                        </div>
+                      )}
+                    </motion.div>
+                  </TabsContent>
                 )}
-              </TabsContent>
+              </AnimatePresence>
             </div>
           )}
         </Tabs>

@@ -7,12 +7,13 @@ const rankIcons = {
   3: "/images/logo/3.png",
 };
 
-const LeaderboardItem = ({ rank, name, points }) => {
+const LeaderboardItem = ({ rank, name, points, isCurrentUser }) => {
   return (
     <tr
       className={clsx(
         "text-sm md:text-base text-gray-800 border border-[#E5F5BD]",
-        rank <= 3 && "font-semibold"
+        rank <= 3 && "font-semibold", // (highlight top 3)
+        isCurrentUser && "bg-yellow-100" // (highlight user login dengan latar kuning muda)
       )}
     >
       {/* Rank */}
@@ -25,17 +26,26 @@ const LeaderboardItem = ({ rank, name, points }) => {
           />
         ) : (
           <span className="text-xl md:text-2xl font-bold text-gray-800">
-            {rank}
+            {rank} {/* (tampilkan nomor rank jika tidak pakai icon) */}
           </span>
         )}
       </td>
 
       {/* Name */}
-      <td className="px-4 py-3 bg-[#EEF8D3]">{name}</td>
+      <td className="px-4 py-3 bg-[#EEF8D3]">
+        {name}
+        {isCurrentUser && ( // (jika user login, tampilkan label "Kamu")
+          <span className="ml-2 inline-block text-xs px-2 py-0.5 bg-green-200 text-green-800 rounded-full">
+            Kamu
+          </span>
+        )}
+      </td>
 
       {/* Points */}
       <td className="px-4 py-3 text-center bg-[#F6FBE9]">
-        <span className="text-sm md:text-base font-medium">{points} Points</span>
+        <span className="text-sm md:text-base font-medium">
+          {points} Points
+        </span>
       </td>
     </tr>
   );

@@ -6,12 +6,12 @@ import { useToast } from "@/hooks/use-toast";
 import { SearchIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import LikeButton from "@/components/my-components/LikeButton";
-import Image from "next/image";
 import { likeHerb, unlikeHerb } from "@/services/herbService";
 import { useRouter } from "next/navigation";
 import { ToastAction } from "@/components/ui/toast";
 import DialogCardPlants from "../DialogCardColection";
 import NotFoundPlants from "@/components/my-components/NotFoundPlants";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ExploreSearch = ({ data, token }) => {
   const [liked, setLiked] = useState({});
@@ -106,8 +106,18 @@ const ExploreSearch = ({ data, token }) => {
   }, [searchTerm, data]);
 
   return (
-    <div className="w-full space-y-6 px-4">
-      <div className="w-full mx-auto rounded-b-2xl flex justify-between items-center text-dark-grey-shades-99 bg-dark-green-shades-20 px-10 py-6">
+    <motion.div
+      className="w-full space-y-6 px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.div
+        className="w-full mx-auto rounded-b-2xl flex justify-between items-center text-dark-grey-shades-99 bg-dark-green-shades-20 px-10 py-6"
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <h2 className="hidden w-full md:inline-block">
           Explore Tanaman Herbal
         </h2>
@@ -124,27 +134,39 @@ const ExploreSearch = ({ data, token }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-      </div>
+      </motion.div>
 
       {filteredData.length === 0 ? (
-        <NotFoundPlants/>
+        <NotFoundPlants />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-          {filteredData.map((herb) => (
-            <CardExplore key={herb.herbId} data={herb}>
-              <div className="w-full flex justify-between items-center ">
-                <DialogCardPlants data={herb.herb} image={herb.image} />
-                <LikeButton
-                  isLiked={liked[herb.herbId]}
-                  onClick={() => toggleLike(herb.herbId, herb.image)}
-                  disbled={loadingLikeId === herb.herbId}
-                />
-              </div>
-            </CardExplore>
-          ))}
+          <AnimatePresence>
+            {filteredData.map((herb, index) => (
+              <motion.div
+                key={herb.herbId}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <CardExplore data={herb}>
+                  <div className="w-full flex justify-between items-center">
+                    <DialogCardPlants data={herb.herb} image={herb.image} />
+                    <LikeButton
+                      isLiked={liked[herb.herbId]}
+                      onClick={() => toggleLike(herb.herbId, herb.image)}
+                      disbled={loadingLikeId === herb.herbId}
+                    />
+                  </div>
+                </CardExplore>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

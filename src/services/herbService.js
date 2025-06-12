@@ -13,7 +13,6 @@ export async function fetchBestHerbs(token = null) {
     const response = await fetch(`${BASE_URL}/bestherbs`, {
       method: "GET",
       headers,
-      cache: "no-store",
     });
 
     const result = await response.json();

@@ -15,6 +15,14 @@ import { useRouter } from "next/navigation";
 import { ToastAction } from "@/components/ui/toast";
 import { savePredictHistory } from "@/services/herbService";
 
+import { motion } from "framer-motion";
+import {
+  fadeUp,
+  fadeLeft,
+  fadeRight,
+  containerStagger,
+} from "@/lib/motionVariants";
+
 const SnapPage = () => {
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +33,6 @@ const SnapPage = () => {
   const [showAnalyzeButton, setShowAnalyzeButton] = useState(true);
 
   const resultRef = useRef(null);
-
   const { toast } = useToast();
   const router = useRouter();
 
@@ -116,7 +123,7 @@ const SnapPage = () => {
 
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-        setShowAnalyzeButton(false); 
+        setShowAnalyzeButton(false);
       }, 300);
     } catch (error) {
       setTimeout(() => {
@@ -140,10 +147,51 @@ const SnapPage = () => {
     }
   };
 
+  const handleClickMulai = () => {
+    if (!predictionResult) {
+      toast({
+        title: "Belum ada hasil prediksi / Hasil Tidak Valid",
+        description:
+          "Silakan unggah gambar dan lakukan prediksi terlebih dahulu.",
+        className: "bg-dark-green-shades-20 text-white border-none",
+            duration: 3000,
+      });
+      return;
+    }
+
+    if (!token) {
+      toast({
+        title: "Harus login terlebih dahulu",
+        description: "Login untuk bisa menyimpan tanaman ke koleksi pribadi.",
+        className: "bg-dark-green-shades-20 text-white border-none",
+            duration: 3000,
+      });
+      return;
+    }
+
+    toast({
+      title: "Tanaman berhasil disimpan",
+      description: "Kamu dapat melihatnya di halaman koleksi herbalmu!",
+      className: "bg-dark-green-shades-20 text-white border-none",
+      duration: 3000,
+    });
+  };
+
   return (
-    <div className="container max-w-screen-xl mx-auto flex flex-col items-center px-4 py-10 sm:px-6 md:p-10">
-      <div className=" flex flex-col items-center gap-10">
-        <div className="flex flex-col items-center gap-8 py-4 md:py-6 lg:py-8">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerStagger}
+      className="container max-w-screen-xl mx-auto flex flex-col items-center px-4 py-10 sm:px-6 md:p-10"
+    >
+      <motion.div
+        variants={fadeUp}
+        className="flex flex-col items-center gap-10"
+      >
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-col items-center gap-8 py-4 md:py-6 lg:py-8"
+        >
           <Image
             className="max-w-52 sm:max-w-64 md:max-w-72"
             src="/images/assets/image_capture.png"
@@ -151,7 +199,10 @@ const SnapPage = () => {
             width={480}
             height={480}
           />
-          <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col gap-2 md:gap-4 lg:gap-6"
+          >
             <h2 className="text-center font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
               Kenali Tanaman dari Foto
             </h2>
@@ -160,25 +211,27 @@ const SnapPage = () => {
               untukmu! Kamu bisa tahu nama, kegunaan, bahkan menyimpannya ke
               koleksi pribadimu
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <CameraCapture
-          setPredictionResult={setPredictionResult}
-          isLoading={isLoading}
-          handlePredict={handlePredict}
-          toast={toast}
-          capturedImage={capturedImage}
-          setCapturedImage={(img) => {
-            setCapturedImage(img);
-            setShowAnalyzeButton(true);
-          }}
-          showAnalyzeButton={showAnalyzeButton}
-        />
+        <motion.div variants={fadeUp} className="w-fit">
+          <CameraCapture
+            setPredictionResult={setPredictionResult}
+            isLoading={isLoading}
+            handlePredict={handlePredict}
+            toast={toast}
+            capturedImage={capturedImage}
+            setCapturedImage={(img) => {
+              setCapturedImage(img);
+              setShowAnalyzeButton(true);
+            }}
+            showAnalyzeButton={showAnalyzeButton}
+          />
+        </motion.div>
 
         {isLoading && <LoadingOverlay message="Memprediksi hasil gambar" />}
 
-        <div className="w-full" ref={resultRef}>
+        <motion.div variants={fadeUp} className="w-full" ref={resultRef}>
           {isPredictingSuccess && predictionResult ? (
             <SnapSuccesPredict
               data={predictionResult?.detail || { name: "", nameLatin: "" }}
@@ -188,12 +241,12 @@ const SnapPage = () => {
           ) : (
             <CardTips />
           )}
-        </div>
+        </motion.div>
 
-        <div className="flex justify-center">
+        <motion.div variants={fadeUp} className="flex justify-center w-full">
           <Card className="max-w-screen-xl bg-transparent shadow-none rounded-xl bg-green-shades-95">
             <CardContent className="p-6 flex flex-col justify-center items-center space-y-4 lg:flex-row lg:justify-between lg:p-8">
-              <div className="space-y-4 lg:w-10/12">
+              <motion.div variants={fadeLeft} className="space-y-4 lg:w-10/12">
                 <h4 className="font-semibold text-dark-grey-shades-15 text-lg sm:text-xl md:text-2xl leading-tight">
                   Ingin menyimpan tanaman ke koleksi pribadimu?
                 </h4>
@@ -202,20 +255,24 @@ const SnapPage = () => {
                   yang kamu temukan, mengumpulkan poin dari tantangan, dan
                   membangun koleksi herbal versimu sendiri.
                 </p>
-              </div>
-              <div className="w-full lg:w-2/12 flex justify-center">
+              </motion.div>
+              <motion.div
+                variants={fadeRight}
+                className="w-full lg:w-2/12 flex justify-center"
+              >
                 <Button
+                  onClick={handleClickMulai}
                   size="lg"
                   className="w-full lg:w-fit font-semibold text-dark-grey-shades-15"
                 >
                   Mulai
                 </Button>
-              </div>
+              </motion.div>
             </CardContent>
           </Card>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

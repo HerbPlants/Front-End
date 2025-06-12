@@ -8,6 +8,7 @@ import LoadingSpinner from "@/components/my-components/LoadingSpinner";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import DialogCardPlants from "@/components/layout/DialogCardColection";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ExploreSection() {
   const [liked, setLiked] = useState({});
@@ -141,18 +142,28 @@ export default function ExploreSection() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-          {visibleHerbs.map((herb) => (
-            <CardExplore key={herb.herbId} data={herb}>
-              <div className="w-full flex justify-between items-center ">
-                <DialogCardPlants data={herb.herb} image={herb.image} />
-                <LikeButton
-                  isLiked={liked[herb.herbId]}
-                  onClick={() => toggleLike(herb.herbId, herb.image)}
-                  disbled={loadingLikeId === herb.herbId}
-                />
-              </div>
-            </CardExplore>
-          ))}
+          <AnimatePresence>
+            {visibleHerbs.map((herb, index) => (
+              <motion.div
+                key={herb.herbId}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 40 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <CardExplore data={herb}>
+                  <div className="w-full flex justify-between items-center">
+                    <DialogCardPlants data={herb.herb} image={herb.image} />
+                    <LikeButton
+                      isLiked={liked[herb.herbId]}
+                      onClick={() => toggleLike(herb.herbId, herb.image)}
+                      disbled={loadingLikeId === herb.herbId}
+                    />
+                  </div>
+                </CardExplore>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </section>
