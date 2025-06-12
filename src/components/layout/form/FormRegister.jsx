@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -24,6 +24,9 @@ import {
 import { LoadingButton } from "@/components/my-components/ButtonCustom";
 import { registerUser } from "@/services/authServices";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 // Skema validasi menggunakan zod
 const registerSchema = z
@@ -43,6 +46,24 @@ export default function FormRegister() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      toast({
+        className: "bg-dark-green-shades-20 text-white border-none",
+        title: "Anda sudah login",
+        description:<h2 className="text-sm">Anda akan diarahkan ke halaman utama</h2>,
+        action : <ToastAction className="text-sm hover:bg-green-shades-85 hover:text-dark-green-shades-20 " onClick={() => { router.push("/") }} altText="Okey">Okey</ToastAction>,
+        duration: 3500
+      })
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
+  }, [router]);
 
   const form = useForm({
     resolver: zodResolver(registerSchema),
@@ -70,18 +91,18 @@ export default function FormRegister() {
 
       let counter = 3;
       setSuccessMessage(
-        `Login berhasil! Mengalihkan dalam ${counter} detik...`
+        `Registrasi berhasil! Mengalihkan dalam ${counter} detik...`
       );
 
       const interval = setInterval(() => {
         counter -= 1;
         setSuccessMessage(
-          `Login berhasil! Mengalihkan dalam ${counter} detik...`
+          `Registrasi berhasil! Mengalihkan dalam ${counter} detik...`
         );
 
         if (counter === 0) {
           clearInterval(interval);
-          window.location.href = "/";
+          router.push("/login");
         }
       }, 1000);
     } catch (err) {

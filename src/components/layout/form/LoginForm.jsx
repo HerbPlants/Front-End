@@ -1,9 +1,9 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -24,6 +24,9 @@ import {
 import { LoadingButton } from "@/components/my-components/ButtonCustom";
 import { loginUser } from "@/services/authServices";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username harus minimal 3 karakter"),
@@ -34,6 +37,24 @@ export default function FormLogin() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      toast({
+        className: "bg-dark-green-shades-20 text-white border-none",
+        title: "Anda sudah login",
+        description:<h2 className="text-sm">Anda akan diarahkan ke halaman utama</h2>,
+        action : <ToastAction className="text-sm hover:bg-green-shades-85 hover:text-dark-green-shades-20 " onClick={() => { router.push("/") }} altText="Okey">Okey</ToastAction>,
+        duration: 3500
+      })
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
+  }, [router]);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -42,6 +63,7 @@ export default function FormLogin() {
       password: "",
     },
   });
+
 
   const onSubmit = async (data) => {
     setErrorMessage("");
@@ -53,6 +75,7 @@ export default function FormLogin() {
 
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
+      localStorage.setItem("fullName", result.fullName || "Unknown User");
 
       let counter = 3;
       setSuccessMessage(
@@ -67,7 +90,7 @@ export default function FormLogin() {
 
         if (counter === 0) {
           clearInterval(interval);
-          window.location.href = "/";
+          router.back();
         }
       }, 1000);
     } catch (err) {

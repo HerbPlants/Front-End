@@ -34,7 +34,7 @@ module.exports = {
 				'dark-grey-shades-15': '#262626',
 				'dark-grey-shades-20': '#333333',
 				'dark-grey-shades-30': '#4C4C4D',
-				'dark-grey-shades-35': '#59595A9', 
+				'dark-grey-shades-35': '#59595A', 
 				'dark-grey-shades-40': '#656567',
 				'dark-grey-shades-60': '#98989A',
 				'dark-grey-shades-90': '#E6E6E6',

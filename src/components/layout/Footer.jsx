@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowUp, MapPinIcon, Phone } from "lucide-react";
@@ -9,33 +9,39 @@ import NAVIGATION_ITEMS from "@/data/menu-config";
 const navItems = NAVIGATION_ITEMS;
 
 export default function FooterSection() {
-
   return (
-    <footer className="bg-dark-green-shades-15 px-10 py-6">
+    <footer className="bg-dark-green-shades-15 px-6 sm:px-10 py-6">
       <div className="container max-w-screen-xl space-y-6 mx-auto">
         <div className="flex justify-between items-center px-4">
-          <Image
-            className="aspect-square max-w-12"
-            src="/images/logo/logo_simple.png"
-            alt="logo"
-            width={40}
-            height={40}
-          />
-          <div className="hidden md:flex gap-4">
+          <div className="flex">
+            <Image
+              className="aspect-square max-w-12"
+              src="/images/logo/logo_simple.png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <p className="w-0 md:w-28"></p>
+          </div>
+
+          <div className="hidden md:flex md:flex-grow justify-center gap-4">
             {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-white hover:underline underline-offset-4 font-medium"
-                  prefetch={false}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-white hover:underline underline-offset-4 font-medium"
+                prefetch={false}
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
           <div className="flex items-center gap-2">
             <p className="text-white">Go To Top</p>
-            <Button className="rounded-full w-10 h-10" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <Button
+              className="rounded-full w-10 h-10"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
               <ArrowUp size={64} className="aspect-square w-10 h-10" />
             </Button>
           </div>
@@ -56,18 +62,23 @@ export default function FooterSection() {
                 variant="outline"
                 className="text-white font-medium border-dark-green-shades-25 flex items-center gap-1 hover:text-white  hover:bg-dark-green-shades-25"
               >
-                  <Phone fill="currentColor" className="text-green-shades-70 hover:text-dark-green-shades-15"/>
+                <Phone
+                  fill="currentColor"
+                  className="text-green-shades-70 hover:text-dark-green-shades-15"
+                />
                 <span>+62 858 23 2309</span>
               </Button>
               <Button
                 variant="outline"
                 className="text-white font-medium border-dark-green-shades-25 flex items-center gap-1 hover:text-white  hover:bg-dark-green-shades-25"
               >
-                <MapPinIcon className="text-green-shades-70 hover:text-dark-green-shades-15"/>
+                <MapPinIcon className="text-green-shades-70 hover:text-dark-green-shades-15" />
                 <span>Indonesia</span>
               </Button>
             </div>
-            <p className="text-white text-center text-base md:text-xs lg:text-sm">&copy; 2025 HerbPlants. All rights reserved.</p>
+            <p className="text-white text-center text-base md:text-xs lg:text-sm">
+              &copy; 2025 HerbPlants. All rights reserved.
+            </p>
           </Card>
         </div>
       </div>

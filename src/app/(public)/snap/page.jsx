@@ -1,48 +1,158 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import CardTips from "@/components/layout/snap-page/CardTips";
+import { Card, CardContent } from "@/components/ui/card";
+
 import CameraCapture from "@/components/layout/snap-page/CameraCapture";
 import { Button } from "@/components/ui/button";
-
-const tipsSnap = [
-  {
-    image_reject: "/images/snap/snap-card-1-1.svg",
-    image_accept: "/images/snap/snap-card-1-2.svg",
-    title: "Letakkan tanamanmu di tengah",
-    description:
-      "Arahkan kamera pada posisi tanaman berada di tengah frame untuk memudahkan identifikasi tanaman.",
-  },
-  {
-    image_reject: "/images/snap/snap-card-2-1.svg",
-    image_accept: "/images/snap/snap-card-2-2.svg",
-    title: "Ambil gambar yang jelas dan jernih",
-    description:
-      "Hindari mengambil gambar yang blur, gelap, atau terlalu terang.",
-  },
-  {
-    image_reject: "/images/snap/snap-card-3-1.svg",
-    image_accept: "/images/snap/snap-card-3-2.svg",
-    title: "Jika tanaman terlalu besar, foto bagian daunnya",
-    description:
-      "Ukuran tanaman yang terlalu besar dan tidak pas di frame, ambil foto di bagian yang paling mudah dijangkau seperti daun atau bunganya.",
-  },
-];
+import CardTips from "@/components/layout/snap-page/CardTips";
+import SnapSuccesPredict from "@/components/layout/snap-page/SnapSuccesPredict";
+import LoadingOverlay from "@/components/my-components/LaodingOverlay";
+import { useToast } from "@/hooks/use-toast";
+import { uploadToPredict } from "@/services/modelMlServices";
+import SnapFailedPredict from "@/components/layout/snap-page/SnapFailedPredict";
+import { useRouter } from "next/navigation";
+import { ToastAction } from "@/components/ui/toast";
+import { savePredictHistory } from "@/services/herbService";
 
 const SnapPage = () => {
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPredictingSuccess, setIsPredictingSuccess] = useState(false);
+  const [isPredictingFailed, setIsPredictingFailed] = useState(false);
+  const [predictionResult, setPredictionResult] = useState(null);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [showAnalyzeButton, setShowAnalyzeButton] = useState(true);
+
+  const resultRef = useRef(null);
+
+  const { toast } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setTimeout(() => {
+        toast({
+          className: "bg-dark-green-shades-20 text-white border-none",
+          title: "Anda belum login",
+          description: (
+            <h2 className="text-sm">
+              Anda tetap bisa menggunakan fitur Snap, namun data anda tidak akan
+              disimpan.
+            </h2>
+          ),
+          action: (
+            <ToastAction
+              className="text-sm hover:bg-green-shades-85 hover:text-dark-green-shades-20 py-4 px-6"
+              onClick={() => {
+                router.push("/login");
+              }}
+              altText="Okey"
+            >
+              Login
+            </ToastAction>
+          ),
+          duration: 3500,
+        });
+      }, 100);
+      return;
+    }
+    setToken(token);
+  }, []);
+
+  const handlePredict = async () => {
+    if (!capturedImage) {
+      toast({
+        className: "bg-dark-green-shades-20 text-white border-none",
+        title: "Gambar belum diambil",
+        description: "Silakan ambil gambar terlebih dahulu sebelum prediksi.",
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const blob = await (await fetch(capturedImage)).blob();
+      const result = await uploadToPredict({ file: blob });
+
+      setPredictionResult(result.data);
+      setIsPredictingSuccess(true);
+      setIsPredictingFailed(false);
+
+      if (token) {
+        try {
+          await savePredictHistory({
+            token,
+            name: result.data.detail.name,
+            confidence: result.data.hasil_predict.confidence,
+            imageBlob: blob,
+          });
+
+          toast({
+            title: "Berhasil disimpan",
+            description: "Hasil prediksi berhasil disimpan ke riwayat.",
+            className: "bg-dark-green-shades-20 text-white border-none",
+            duration: 3000,
+          });
+        } catch (err) {
+          console.error("Gagal menyimpan ke riwayat:", err.message);
+          toast({
+            title: "Gagal menyimpan riwayat",
+            description: "Terjadi kendala pada server saat menyimpan riwayat.",
+            variant: "destructive",
+            duration: 3000,
+          });
+        }
+      }
+
+      setTimeout(() => {
+        const element = resultRef.current;
+        if (element) {
+          const yOffset = -120;
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+        setShowAnalyzeButton(false); 
+      }, 300);
+    } catch (error) {
+      setTimeout(() => {
+        setPredictionResult(null);
+        setIsPredictingSuccess(false);
+        setIsPredictingFailed(true);
+        const element = resultRef.current;
+        if (element) {
+          const yOffset = -120;
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+        setShowAnalyzeButton(false);
+      }, 300);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
   return (
-    <div className="container flex flex-col items-center">
-      <div className="max-w-screen-xl flex flex-col items-center gap-10">
+    <div className="container max-w-screen-xl mx-auto flex flex-col items-center px-4 py-10 sm:px-6 md:p-10">
+      <div className=" flex flex-col items-center gap-10">
         <div className="flex flex-col items-center gap-8 py-4 md:py-6 lg:py-8">
           <Image
-            className="w-40"
+            className="max-w-52 sm:max-w-64 md:max-w-72"
             src="/images/assets/image_capture.png"
             alt="snap"
             width={480}
             height={480}
           />
           <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
-            <h2 className="text-center font-semibold text-2xl md:text-4xl lg:text-5xl">
+            <h2 className="text-center font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
               Kenali Tanaman dari Foto
             </h2>
             <p className="max-w-screen-lg text-center font-medium text-sm md:text-base lg:text-lg">
@@ -52,25 +162,34 @@ const SnapPage = () => {
             </p>
           </div>
         </div>
-        <div className="">
-          <CameraCapture />
+
+        <CameraCapture
+          setPredictionResult={setPredictionResult}
+          isLoading={isLoading}
+          handlePredict={handlePredict}
+          toast={toast}
+          capturedImage={capturedImage}
+          setCapturedImage={(img) => {
+            setCapturedImage(img);
+            setShowAnalyzeButton(true);
+          }}
+          showAnalyzeButton={showAnalyzeButton}
+        />
+
+        {isLoading && <LoadingOverlay message="Memprediksi hasil gambar" />}
+
+        <div className="w-full" ref={resultRef}>
+          {isPredictingSuccess && predictionResult ? (
+            <SnapSuccesPredict
+              data={predictionResult?.detail || { name: "", nameLatin: "" }}
+            />
+          ) : isPredictingFailed && !predictionResult ? (
+            <SnapFailedPredict />
+          ) : (
+            <CardTips />
+          )}
         </div>
-        <div className="max-w-screen-xl mx-auto space-y-10">
-          <h2 className="text-dark-grey-shades-15 text-center text-4xl font-bold">
-            Tips Foto Tanaman
-          </h2>
-          <div className="flex gap-4 justify-center flex-wrap">
-            {tipsSnap.map((item, index) => (
-              <CardTips
-                key={index}
-                image_reject={item.image_reject}
-                image_accept={item.image_accept}
-                title={item.title}
-                description={item.description}
-              />
-            ))}
-          </div>
-        </div>
+
         <div className="flex justify-center">
           <Card className="max-w-screen-xl bg-transparent shadow-none rounded-xl bg-green-shades-95">
             <CardContent className="p-6 flex flex-col justify-center items-center space-y-4 lg:flex-row lg:justify-between lg:p-8">
@@ -85,7 +204,12 @@ const SnapPage = () => {
                 </p>
               </div>
               <div className="w-full lg:w-2/12 flex justify-center">
-                <Button size="lg" className="w-full lg:w-fit font-semibold text-dark-grey-shades-15">Mulai</Button>
+                <Button
+                  size="lg"
+                  className="w-full lg:w-fit font-semibold text-dark-grey-shades-15"
+                >
+                  Mulai
+                </Button>
               </div>
             </CardContent>
           </Card>
