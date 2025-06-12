@@ -1,4 +1,4 @@
-# 🌿 Plant Classifier Front-End
+# 🌿 HerbPlants - Front-End
 
 Ini adalah proyek front-end dari aplikasi klasifikasi tumbuhan berbasis AI. Aplikasi ini memungkinkan pengguna mengidentifikasi jenis tanaman melalui gambar dan mendapatkan informasi terkait secara interaktif dan responsif.
 
