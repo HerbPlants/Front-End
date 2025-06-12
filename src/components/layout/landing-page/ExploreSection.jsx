@@ -124,17 +124,36 @@ export default function ExploreSection() {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 ">
-      <div className="space-y-4 md:space-y-6">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-2">
-          Explore
-        </h2>
-        <p className="text-center max-w-screen-lg mx-auto text-sm sm:text-base md:text-base lg:text-xl text-gray-700">
-          Telusuri berbagai jenis tanaman herbal dari seluruh Indonesia. Mulai
-          dari tanaman langka hingga yang sering kamu lihat di halaman rumah,
-          semua bisa kamu pelajari dengan fitur pencarian dan penjelasan yang
-          mudah dipahami.
-        </p>
-      </div>
+      <AnimatePresence>
+        <motion.div
+          className="space-y-4 md:space-y-6"
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.h2
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Explore
+          </motion.h2>
+
+          <motion.p
+            className="text-center max-w-screen-lg mx-auto text-sm sm:text-base md:text-base lg:text-xl text-gray-700"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Telusuri berbagai jenis tanaman herbal dari seluruh Indonesia. Mulai
+            dari tanaman langka hingga yang sering kamu lihat di halaman rumah,
+            semua bisa kamu pelajari dengan fitur pencarian dan penjelasan yang
+            mudah dipahami.
+          </motion.p>
+        </motion.div>
+      </AnimatePresence>
 
       {isLoading ? (
         <div className="min-h-[40vh] flex justify-center items-center">
