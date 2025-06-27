@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/api/predict',
-        destination: 'http://13.213.77.209:5000/predict',
+        destination: 'http://47.129.222.248:5000/predict',
       },
     ]
   },
